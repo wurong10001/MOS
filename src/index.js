@@ -27,15 +27,8 @@ export default {
  * Home page
  */
 function handleHome(request) {
-  const data = {
-    service: 'MOS',
-    version: '1.0.0',
-    status: 'running',
-    endpoints: ['/api/health', '/api/echo'],
-  };
-
-  return new Response(JSON.stringify(data, null, 2), {
-    headers: { 'content-type': 'application/json' },
+  return new Response('hi', {
+    headers: { 'content-type': 'text/plain; charset=utf-8' },
   });
 }
 
