@@ -1,0 +1,23 @@
+# MOS - Cloudflare Workers Configuration
+name = "mos"
+main = "src/index.js"
+compatibility_date = "2026-09-18"
+
+# [vars]
+# MY_VAR = "my-variable"
+
+# [[kv_namespaces]]
+# binding = "MY_KV"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "mos-db"
+# database_id = ""
+
+# [ai]
+# binding = "AI"

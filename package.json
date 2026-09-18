@@ -1,0 +1,14 @@
+{
+  "name": "mos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MOS - Cloudflare Workers Service",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.17"
+  }
+}
