@@ -10,15 +10,6 @@
 </head>
 <body class="touch-os">
   <main class="touch-screen">
-    <header class="touch-status" aria-label="系统状态栏">
-      <span class="touch-time">9:41</span>
-      <div class="touch-status-icons" aria-hidden="true">
-        <span class="signal-icon"><i></i><i></i><i></i><i></i></span>
-        <span class="wifi-icon"></span>
-        <span class="battery-icon"><i></i></span>
-      </div>
-    </header>
-
     <section class="touch-widgets" aria-label="桌面小组件">
       <div class="touch-date-widget">
         <span class="touch-weekday">星期五</span>
@@ -45,10 +36,6 @@
       <span class="touch-icon-slot" aria-label="应用图标预留位置 10"></span>
       <span class="touch-icon-slot" aria-label="应用图标预留位置 11"></span>
       <span class="touch-icon-slot" aria-label="应用图标预留位置 12"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 13"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 14"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 15"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 16"></span>
     </section>
 
     <footer class="touch-bottom">
@@ -62,5 +49,24 @@
     </footer>
     <div class="touch-home-indicator" aria-hidden="true"></div>
   </main>
+  <script>
+    (() => {
+      const screen = window.screen;
+      const updateSafeArea = () => {
+        const shortSide = Math.min(screen.width, screen.height);
+        const landscape = window.matchMedia("(orientation: landscape)").matches;
+        const inlineInset = Math.min(30, Math.max(16, Math.round(shortSide * 0.055)));
+        const blockInset = Math.min(30, Math.max(12, Math.round(shortSide * (landscape ? 0.06 : 0.035))));
+
+        document.documentElement.style.setProperty("--ratio-safe-inline", `${inlineInset}px`);
+        document.documentElement.style.setProperty("--ratio-safe-block", `${blockInset}px`);
+        document.documentElement.dataset.orientation = landscape ? "landscape" : "portrait";
+      };
+
+      updateSafeArea();
+      window.addEventListener("resize", updateSafeArea);
+      window.addEventListener("orientationchange", updateSafeArea);
+    })();
+  </script>
 </body>
 </html>
