@@ -3,6 +3,11 @@ name = "mos"
 main = "src/index.js"
 compatibility_date = "2026-09-18"
 
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
 # [vars]
 # MY_VAR = "my-variable"
 

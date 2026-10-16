@@ -1,0 +1,176 @@
+:root {
+  color-scheme: light;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: #202333;
+  background: #f4f5fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --muted: #898da0;
+  --purple: #7165e8;
+  --line: #ececf3;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
+.desktop {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 244px minmax(0, 1fr);
+}
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 244px;
+  padding: 28px 18px;
+  background: #fff;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+.brand { display: flex; align-items: center; gap: 11px; padding: 0 10px; font: 800 20px "Avenir Next", "Segoe UI", sans-serif; letter-spacing: -.8px; }
+.brand-mark { width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg,#8b7cff,#6257db); box-shadow: 0 6px 15px #7165e842; font-size: 16px; }
+.workspace { margin: 39px 10px 13px; color: #a0a2b0; font-size: 10px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+.nav { display: grid; gap: 5px; }
+.nav a { display: flex; align-items: center; gap: 13px; padding: 12px 13px; border-radius: 11px; color: #787c90; font-size: 13px; font-weight: 600; }
+.nav a.active { color: #6459d8; background: #f1efff; }
+.nav-icon { width: 18px; text-align: center; font-size: 16px; }
+.sidebar-bottom { margin-top: auto; }
+.storage { padding: 15px; border: 1px solid var(--line); border-radius: 14px; }
+.storage-head { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; }
+.storage-head span:last-child { color: var(--muted); font-weight: 500; }
+.storage-track { height: 5px; margin: 12px 0 8px; border-radius: 9px; background: #eeeeF5; overflow: hidden; }
+.storage-fill { width: 38%; height: 100%; border-radius: inherit; background: var(--purple); }
+.storage small { color: var(--muted); font-size: 10px; }
+.user { display: flex; align-items: center; gap: 10px; margin: 20px 5px 0; }
+.avatar { width: 35px; height: 35px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(140deg,#f0ad8a,#c26c88); font-size: 12px; font-weight: 700; }
+.user strong { display: block; font-size: 11px; }
+.user small { color: var(--muted); font-size: 10px; }
+.main { grid-column: 2; padding: 0 42px 45px; max-width: 1500px; width: 100%; margin: 0 auto; }
+.topbar { height: 88px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e9eaf1; }
+.crumb { color: var(--muted); font-size: 12px; }
+.crumb strong { color: #303346; font-weight: 600; }
+.top-actions { display: flex; align-items: center; gap: 17px; color: #777b8e; font-size: 12px; }
+.icon-button { width: 35px; height: 35px; border: 1px solid #e8e8ef; background: #fff; border-radius: 11px; color: #6e7185; }
+.welcome { display: flex; justify-content: space-between; align-items: end; margin: 36px 0 25px; }
+.eyebrow { color: var(--purple); font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+h1,h2,h3,p { margin-top: 0; }
+.welcome h1 { margin: 8px 0 6px; font: 700 28px "Avenir Next", "Segoe UI", sans-serif; letter-spacing: -1.1px; }
+.welcome p { margin: 0; color: var(--muted); font-size: 12px; }
+.date-pill { padding: 10px 13px; border: 1px solid #e7e7ef; background: #fff; border-radius: 10px; color: #686c80; font-size: 11px; }
+.hero { position: relative; overflow: hidden; min-height: 206px; padding: 31px 35px; border-radius: 20px; color: #fff; background: linear-gradient(110deg,#635bd8 0%,#7867e9 55%,#9d83ed 100%); }
+.hero:after { content: ""; position: absolute; width: 310px; height: 310px; right: 8%; top: -185px; border: 1px solid #ffffff30; border-radius: 50%; box-shadow: 0 0 0 28px #ffffff0b,0 0 0 58px #ffffff0b,0 0 0 90px #ffffff0b; }
+.hero-label { color: #e0dcff; font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase; }
+.hero h2 { position: relative; z-index: 1; margin: 11px 0 8px; font: 700 23px "Avenir Next", "Segoe UI", sans-serif; letter-spacing: -.7px; }
+.hero p { position: relative; z-index: 1; max-width: 390px; margin: 0; color: #e4e0ff; font-size: 12px; line-height: 1.7; }
+.hero-link { position: relative; z-index: 1; display: inline-block; margin-top: 18px; padding: 9px 13px; border-radius: 8px; background: #fff; color: #655bd4; font-size: 11px; font-weight: 700; }
+.section-title { display: flex; justify-content: space-between; align-items: center; margin: 30px 0 14px; }
+.section-title h2 { margin: 0; font: 700 15px "Avenir Next", "Segoe UI", sans-serif; }
+.section-title a { color: var(--purple); font-size: 11px; font-weight: 600; }
+.apps { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 13px; }
+.app-card { min-height: 122px; padding: 17px; border: 1px solid #ececf2; background: #fff; border-radius: 15px; transition: transform .18s ease,box-shadow .18s ease; }
+.app-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px #32345a0c; }
+.app-icon { width: 36px; height: 36px; display: grid; place-items: center; margin-bottom: 13px; border-radius: 12px; font-size: 17px; }
+.lavender { background: #f0edff; color: #7568df; }.mint { background: #e7f7f0; color: #43aa7b; }.peach { background: #fff0e8; color: #e58a5b; }.blue { background: #eaf2ff; color: #5481d7; }
+.app-card strong { display: block; font-size: 11px; }
+.app-card small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+.bottom-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 15px; margin-top: 27px; }
+.panel { padding: 19px; border: 1px solid #ececf2; background: #fff; border-radius: 15px; }
+.panel-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 17px; }
+.panel-heading h3 { margin: 0; font: 700 12px "Avenir Next", "Segoe UI", sans-serif; }
+.panel-heading span { color: var(--muted); font-size: 10px; }
+.activity { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-top: 1px solid #f1f1f5; }
+.activity-icon { width: 30px; height: 30px; display: grid; place-items: center; flex: none; border-radius: 10px; background: #f3f1ff; color: #7165e8; font-size: 13px; }
+.activity strong { display: block; font-size: 10px; }
+.activity small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
+.activity time { margin-left: auto; color: #a1a3b0; font-size: 9px; white-space: nowrap; }
+.quick-note { min-height: 125px; padding: 15px; border-radius: 11px; background: linear-gradient(135deg,#f8f6ff,#f2f6ff); }
+.quick-note strong { font-size: 11px; }.quick-note p { margin: 8px 0 0; color: #777b90; font-size: 10px; line-height: 1.7; }
+
+.touch-os { --touch-blue: #003b5c; min-width: 320px; min-height: 100vh; overflow: hidden; color: #fff; background: var(--touch-blue); }
+.touch-screen { position: relative; display: flex; width: 100%; max-width: 520px; min-height: 100vh; min-height: 100svh; margin: 0 auto; flex-direction: column; overflow: hidden; padding: env(safe-area-inset-top) 21px calc(24px + env(safe-area-inset-bottom)); background: var(--touch-blue); }
+.touch-status { display: flex; height: 34px; flex: none; align-items: center; justify-content: space-between; padding: 0 8px; font-size: 14px; font-weight: 700; }
+.touch-time { letter-spacing: .1px; }
+.touch-status-icons { display: flex; height: 100%; align-items: center; gap: 7px; }
+.signal-icon { display: flex; height: 13px; align-items: end; gap: 2px; }
+.signal-icon i { width: 3px; border-radius: 2px; background: #fff; }.signal-icon i:nth-child(1) { height: 4px; }.signal-icon i:nth-child(2) { height: 7px; }.signal-icon i:nth-child(3) { height: 10px; }.signal-icon i:nth-child(4) { height: 13px; }
+.wifi-icon { width: 15px; height: 11px; border: 2px solid transparent; border-top-color: #fff; border-radius: 50%; position: relative; transform: translateY(3px); }
+.wifi-icon:before { position: absolute; top: 2px; left: 2px; width: 7px; height: 7px; border: 2px solid transparent; border-top-color: #fff; border-radius: 50%; content: ""; }
+.wifi-icon:after { position: absolute; top: 7px; left: 6px; width: 3px; height: 3px; border-radius: 50%; background: #fff; content: ""; }
+.battery-icon { position: relative; width: 22px; height: 11px; border: 1.5px solid #ffffffed; border-radius: 3px; }
+.battery-icon:after { position: absolute; top: 2px; right: -4px; width: 2px; height: 5px; border-radius: 0 2px 2px 0; background: #ffffffed; content: ""; }
+.battery-icon i { position: absolute; inset: 2px 4px 2px 2px; border-radius: 1px; background: #fff; }
+.touch-widgets { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: clamp(24px,6vh,60px) 3px clamp(20px,3.5vh,34px); }
+.touch-date-widget,.touch-cloud-widget { display: flex; min-width: 0; aspect-ratio: 1.06; flex-direction: column; justify-content: space-between; padding: 17px; border: 1px solid #ffffff50; border-radius: 22px; background: #ffffff16; box-shadow: inset 0 1px #ffffff1e; }
+.touch-weekday { color: #ffffffc7; font-size: 12px; font-weight: 600; }
+.touch-date-widget strong { font-size: clamp(23px,7vw,32px); font-weight: 600; letter-spacing: -.8px; }
+.touch-cloud-widget { justify-content: flex-start; align-items: flex-start; }
+.cloud-widget-mark { display: grid; width: 30px; height: 30px; place-items: center; margin-bottom: auto; border: 1px solid #ffffff50; border-radius: 10px; background: #ffffff23; font: 700 17px "Avenir Next","Segoe UI",sans-serif; }
+.cloud-widget-label { margin: 12px 0 5px; color: #ffffffb5; font-size: 8px; font-weight: 700; letter-spacing: 1.3px; }
+.touch-cloud-widget strong { font-size: 13px; font-weight: 600; }
+.touch-cloud-widget small { margin-top: 5px; color: #ffffffb5; font-size: 10px; }
+.touch-icon-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); justify-items: center; gap: clamp(12px,2.8vh,24px) 10px; padding: 0 2px; }
+.touch-icon-slot { display: block; width: clamp(48px,14vw,62px); aspect-ratio: 1; border: 1px solid #ffffff4a; border-radius: 18px; background: #ffffff10; box-shadow: inset 0 1px #ffffff1a; }
+.touch-bottom { display: grid; gap: 17px; justify-items: center; margin-top: auto; padding-top: 22px; }
+.touch-page-dots { display: flex; align-items: center; gap: 7px; height: 8px; }
+.touch-page-dots i { width: 5px; height: 5px; border-radius: 50%; background: #ffffff72; }
+.touch-page-dots i.selected { width: 7px; height: 7px; background: #fff; }
+.touch-dock { display: grid; width: 100%; grid-template-columns: repeat(4,minmax(0,1fr)); justify-items: center; align-items: center; padding: 12px 6px; border: 1px solid #ffffff45; border-radius: 25px; background: #ffffff1c; box-shadow: inset 0 1px #ffffff20; }
+.touch-dock .touch-icon-slot { width: clamp(46px,13vw,58px); background: #ffffff1a; }
+.touch-home-indicator { position: absolute; bottom: max(8px,env(safe-area-inset-bottom)); left: 50%; width: 108px; height: 4px; transform: translateX(-50%); border-radius: 4px; background: #ffffffdc; }
+
+.desktop-os { --touch-blue: #003b5c; min-width: 320px; min-height: 100vh; overflow: hidden; color: #fff; background: var(--touch-blue); }
+.desktop-screen { position: relative; display: flex; width: 100%; min-height: 100vh; flex-direction: column; align-items: center; overflow: hidden; background: var(--touch-blue); }
+.system-bar { position: relative; z-index: 1; display: flex; width: 100%; height: 42px; flex: none; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid #ffffff12; background: #10132642; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); font-size: 12px; }
+.system-menu,.system-status { display: flex; height: 100%; align-items: center; gap: 20px; }
+.system-menu { gap: 19px; }
+.system-menu strong { font-size: 12px; font-weight: 700; }
+.system-logo { display: grid; width: 23px; height: 23px; place-items: center; border: 1px solid #ffffff6e; border-radius: 8px; background: #ffffff1c; font: 700 14px "Avenir Next","Segoe UI",sans-serif; }
+.menu-divider { width: 1px; height: 15px; margin-left: -5px; background: #ffffff35; }
+.system-menu > span:not(.menu-divider) { color: #ffffffd9; }
+.system-status { gap: 14px; color: #ffffffe8; }
+.status-symbol { font-size: 15px; }.status-battery { position: relative; width: 19px; height: 10px; border: 1px solid #ffffffc9; border-radius: 3px; }
+.status-battery:after { position: absolute; top: 2px; right: -4px; width: 2px; height: 4px; border-radius: 0 2px 2px 0; background: #ffffffc9; content: ""; }
+.status-battery i { position: absolute; inset: 2px 4px 2px 2px; border-radius: 1px; background: #ffffffdf; }
+.status-date { font-size: 11px; }
+.desktop-welcome { position: relative; z-index: 1; display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; padding: 35px 20px 110px; text-align: center; }
+.welcome-mark { display: grid; width: 62px; height: 62px; place-items: center; margin-bottom: 24px; border: 1px solid #ffffff49; border-radius: 21px; background: linear-gradient(145deg,#ffffff3b,#ffffff0c); box-shadow: 0 12px 55px #0d102d4a,inset 0 1px #ffffff50; backdrop-filter: blur(14px); font: 700 32px "Avenir Next","Segoe UI",sans-serif; }
+.desktop-caption { color: #ffffffa8; font-size: 10px; font-weight: 600; letter-spacing: 3px; }
+.desktop-welcome h1 { margin: 13px 0 9px; font: 500 clamp(24px,3vw,34px) "Avenir Next","Segoe UI",sans-serif; letter-spacing: .3px; }
+.desktop-welcome p { margin: 0; color: #ffffffb7; font-size: 13px; letter-spacing: .2px; }
+.desktop-dock { position: absolute; z-index: 2; bottom: max(20px,env(safe-area-inset-bottom)); left: 50%; display: flex; width: min(390px,calc(100% - 36px)); height: 68px; transform: translateX(-50%); align-items: center; justify-content: center; border: 1px solid #ffffff36; border-radius: 22px; background: #ffffff1d; box-shadow: 0 12px 45px #10132942,inset 0 1px #ffffff2d; backdrop-filter: blur(26px) saturate(145%); -webkit-backdrop-filter: blur(26px) saturate(145%); }
+.dock-empty { color: #ffffffa6; font-size: 11px; letter-spacing: .3px; }
+
+@media (max-width: 1100px) {
+  .main { padding-right: 27px; padding-left: 27px; }
+  .apps { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 680px) {
+  .system-bar { height: 40px; padding: 0 13px; }
+  .system-menu,.system-status { gap: 11px; }
+  .system-menu > span:not(.menu-divider) { display: none; }
+  .menu-divider { display: none; }
+  .status-date { font-size: 10px; }
+  .desktop-welcome { padding-bottom: 100px; }
+  .desktop-welcome p { max-width: 280px; font-size: 12px; line-height: 1.7; }
+  .desktop-dock { height: 62px; border-radius: 20px; }
+  .desktop { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { grid-column: 1; padding: 0 18px 32px; }
+  .topbar { height: 68px; }
+  .welcome { margin: 26px 0 19px; }
+  .welcome h1 { font-size: 23px; }
+  .date-pill { display: none; }
+  .hero { min-height: 190px; padding: 25px; }
+  .hero h2 { font-size: 20px; }
+  .apps { gap: 9px; }
+  .app-card { min-height: 110px; padding: 13px; }
+  .bottom-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
