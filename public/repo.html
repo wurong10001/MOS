@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#003b5c">
+  <meta name="description" content="MOS 软件源：壁纸与应用下载">
+  <title>MOS 软件源</title>
+  <link rel="stylesheet" href="/assets/system.css">
+  <style>
+    .repo-page { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+    .repo-head { display: flex; align-items: baseline; gap: 12px; }
+    .repo-head h1 { font-size: 22px; margin: 0; }
+    .repo-status { font-size: 13px; opacity: .7; }
+    .repo-tabs { display: flex; gap: 8px; margin: 18px 0; flex-wrap: wrap; }
+    .repo-tabs button { padding: 6px 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,.25);
+      background: transparent; color: inherit; cursor: pointer; font-size: 14px; }
+    .repo-tabs button.active { background: rgba(255,255,255,.18); }
+    .repo-list { display: grid; gap: 10px; }
+    .repo-item { display: flex; align-items: center; gap: 14px; padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.18); border-radius: 10px; }
+    .repo-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; flex: none;
+      background: rgba(255,255,255,.08); }
+    .repo-meta { flex: 1; min-width: 0; }
+    .repo-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .repo-sub { font-size: 12px; opacity: .65; margin-top: 2px; }
+    .repo-actions { display: flex; gap: 8px; flex: none; }
+    .repo-actions button, .repo-actions a { padding: 6px 12px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.25); background: transparent; color: inherit;
+      cursor: pointer; font-size: 13px; text-decoration: none; }
+    .repo-actions .primary { background: rgba(255,255,255,.18); }
+    .repo-empty { opacity: .6; padding: 20px 0; }
+  </style>
+</head>
+<body class="desktop-os">
+  <main class="repo-page">
+    <div class="repo-head">
+      <h1><a href="/" style="color:inherit;text-decoration:none">m</a> MOS 软件源</h1>
+      <span class="repo-status" id="status">正在加载索引…</span>
+    </div>
+    <div class="repo-tabs" id="tabs"></div>
+    <div class="repo-list" id="list"><div class="repo-empty">加载中…</div></div>
+  </main>
+
+  <script src="/assets/repo.js"></script>
+  <script>
+    (function () {
+      const CAT_LABEL = { wallpaper: "壁纸", mosapp: "应用", misc: "其他" };
+      let all = [];
+      let activeCat = "";
+
+      const $status = document.getElementById("status");
+      const $tabs = document.getElementById("tabs");
+      const $list = document.getElementById("list");
+
+      function fmtSize(n) {
+        if (n < 1024) return n + " B";
+        if (n < 1048576) return (n / 1024).toFixed(1) + " KB";
+        return (n / 1048576).toFixed(2) + " MB";
+      }
+
+      function renderTabs() {
+        const cats = [""];
+        const seen = new Set(all.map(f => f.category));
+        Array.from(seen).sort().forEach(c => cats.push(c));
+        $tabs.innerHTML = "";
+        cats.forEach(c => {
+          const b = document.createElement("button");
+          b.textContent = c === "" ? "全部" : (CAT_LABEL[c] || c);
+          b.className = c === activeCat ? "active" : "";
+          b.onclick = () => { activeCat = c; renderTabs(); renderList(); };
+          $tabs.appendChild(b);
+        });
+      }
+
+      function renderList() {
+        const items = activeCat ? all.filter(f => f.category === activeCat) : all;
+        $list.innerHTML = "";
+        if (!items.length) {
+          $list.innerHTML = '<div class="repo-empty">源里还没有文件。往 mos-repo 的 uploads/ 推文件即可自动入索引。</div>';
+          return;
+        }
+        items.forEach(item => {
+          const row = document.createElement("div"); row.className = "repo-item";
+          if (item.type === "image") {
+            const img = document.createElement("img");
+            img.className = "repo-thumb"; img.src = item.url; img.alt = item.name;
+            img.onerror = () => img.remove();
+            row.appendChild(img);
+          }
+          const meta = document.createElement("div"); meta.className = "repo-meta";
+          meta.innerHTML = '<div class="repo-name"></div><div class="repo-sub"></div>';
+          meta.querySelector(".repo-name").textContent = item.name;
+          meta.querySelector(".repo-sub").textContent =
+            (CAT_LABEL[item.category] || item.category) + " · " + item.type +
+            " · " + fmtSize(item.size) + " · " + (item.updated_at || "").slice(0, 10);
+          row.appendChild(meta);
+
+          const acts = document.createElement("div"); acts.className = "repo-actions";
+          const dl = document.createElement("button");
+          dl.className = "primary"; dl.textContent = "下载";
+          dl.onclick = () => {
+            dl.disabled = true; dl.textContent = "校验中…";
+            MosRepo.download(item).then(r => {
+              dl.textContent = r.verified ? "已下载✓" : "已下载";
+              $status.textContent = item.name + " 下载完成，SHA256 " + (r.verified ? "校验通过" : "未能校验");
+            }).catch(e => {
+              dl.textContent = "失败"; $status.textContent = "下载失败: " + e.message;
+            }).finally(() => { dl.disabled = false; setTimeout(() => dl.textContent = "下载", 2500); });
+          };
+          acts.appendChild(dl);
+          const link = document.createElement("a");
+          link.textContent = "直链"; link.href = item.url; link.target = "_blank"; link.rel = "noopener";
+          acts.appendChild(link);
+          row.appendChild(acts);
+          $list.appendChild(row);
+        });
+      }
+
+      MosRepo.loadIndex(true).then(idx => {
+        all = idx.files || [];
+        $status.textContent = "共 " + all.length + " 个文件 · 索引更新 " +
+          (idx.generated_at || "").slice(0, 16).replace("T", " ");
+        renderTabs(); renderList();
+      }).catch(e => {
+        $status.textContent = "索引加载失败: " + e.message;
+        $list.innerHTML = "";
+      });
+    })();
+  </script>
+</body>
+</html>
