@@ -24,6 +24,7 @@ const fx = (f) => join(ROOT, "tests/fixtures", f);
 const abOf = (p) => { const b = readFileSync(p); return b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength); };
 
 // 生成动态 fixture（保证 RED 阶段不依赖实现）
+mkdirSync(join(ROOT, "tests/fixtures"), { recursive: true });
 execFileSync("python3", ["-c", `
 import zipfile
 def mk(path, files, deflate=True):
