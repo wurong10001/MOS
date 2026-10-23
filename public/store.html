@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#003b5c">
+  <meta name="description" content="MOS 应用商店：连接 mos-repo 软件源">
+  <title>MOS 应用商店</title>
+  <link rel="stylesheet" href="/assets/system.css">
+  <style>
+    .store-page { max-width: 900px; margin: 0 auto; padding: 20px 14px 72px; }
+    .store-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .store-head h1 { font-size: 21px; margin: 0; }
+    .store-head a { color: inherit; text-decoration: none; font-size: 13px; opacity: .8; }
+    .store-status { font-size: 12px; opacity: .65; width: 100%; min-height: 16px; }
+    .store-tabs { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+    .store-tabs button { padding: 6px 15px; border-radius: 16px; font-size: 14px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.25); background: transparent; color: inherit; }
+    .store-tabs button.active { background: rgba(255,255,255,.18); }
+    .store-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 12px; }
+    .app-card { display: flex; flex-direction: column; gap: 10px; padding: 14px;
+      border: 1px solid rgba(255,255,255,.18); border-radius: 14px; background: rgba(255,255,255,.05); }
+    .app-top { display: flex; gap: 12px; align-items: center; }
+    .app-ico { width: 52px; height: 52px; flex: none; border-radius: 14px; display: grid; place-items: center;
+      background: linear-gradient(160deg,#2b4d77,#17243c); box-shadow: inset 0 1px rgba(255,255,255,.25); }
+    .app-ico svg { width: 30px; height: 30px; }
+    .app-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .app-sub { font-size: 12px; opacity: .6; margin-top: 3px; }
+    .app-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+    .app-acts button { flex: 1; min-width: 84px; padding: 7px 10px; border-radius: 9px; cursor: pointer;
+      font-size: 13px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: inherit; }
+    .app-acts .primary { background: rgba(255,255,255,.18); }
+    .app-acts button:disabled { opacity: .5; cursor: default; }
+    .badge-installed { font-size: 11px; padding: 2px 8px; border-radius: 8px;
+      background: #2e7d3255; border: 1px solid #4caf5066; }
+    .store-empty { opacity: .6; padding: 24px 4px; }
+  </style>
+</head>
+<body class="desktop-os">
+  <main class="store-page">
+    <div class="store-head">
+      <h1><a href="/">m</a> 应用商店</h1>
+      <a href="/">返回桌面</a>
+      <a href="/repo.html">源文件列表</a>
+    </div>
+    <div class="store-status" id="status">正在连接软件源…</div>
+    <div class="store-tabs" id="tabs"></div>
+    <div class="store-grid" id="grid"><div class="store-empty">加载中…</div></div>
+  </main>
+
+  <script src="/assets/repo.js"></script>
+  <script type="module">
+    import { createVFS } from "/assets/mos-vfs.js";
+    import { installItem, uninstallApp, listInstalled, isInstalled } from "/assets/mos-store.js";
+    import { applyFromRepoItem, currentWallpaper } from "/assets/theme_host.js";
+
+    const ICONS = {
+      app: '<svg viewBox="0 0 24 24" fill="none" stroke="#cfe2ff" stroke-width="1.6"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>',
+      wallpaper: '<svg viewBox="0 0 24 24" fill="none" stroke="#cfe2ff" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 18l6-5 4 3 3-2 5 4"/></svg>',
+      trash: '<svg viewBox="0 0 24 24" fill="none" stroke="#ffb4a9" stroke-width="1.6"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>',
+    };
+    const CAT_LABEL = { mosapp: "应用", wallpaper: "壁纸", misc: "其他" };
+    const $status = document.getElementById("status");
+    const $tabs = document.getElementById("tabs");
+    const $grid = document.getElementById("grid");
+    const vfs = createVFS(); await vfs.init();
+    let all = [], tab = "", installedIds = new Set(), lastWall = null;
+
+    const fmtSize = (n) => n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(1) + " KB" : (n / 1048576).toFixed(2) + " MB";
+    const fetcher = async (item) => (await window.MosRepo.fetchBlob(item)).bytes;
+
+    async function refreshInstalled() {
+      installedIds = new Set((await listInstalled(vfs)).map((a) => a.id));
+      lastWall = await currentWallpaper();
+    }
+    const idOf = (name) => (name || "").replace(/\.[^.]+$/, "").replace(/[\/\\:*?"<>|]/g, "_") || "app";
+
+    function renderTabs() {
+      const cats = ["", "mosapp", "wallpaper", "installed"];
+      $tabs.innerHTML = "";
+      const label = (c) => c === "" ? "全部" : c === "installed" ? "已安装" : CAT_LABEL[c] || c;
+      cats.forEach((c) => {
+        const b = document.createElement("button");
+        b.textContent = label(c);
+        b.className = c === tab ? "active" : "";
+        b.onclick = () => { tab = c; renderTabs(); renderGrid(); };
+        $tabs.appendChild(b);
+      });
+    }
+
+    function makeCard(item) {
+      const card = document.createElement("div"); card.className = "app-card";
+      const top = document.createElement("div"); top.className = "app-top";
+      const ico = document.createElement("div"); ico.className = "app-ico";
+      ico.innerHTML = item.category === "wallpaper" ? ICONS.wallpaper : ICONS.app;
+      const meta = document.createElement("div"); meta.className = "app-name";
+      meta.style.flex = "1"; meta.style.minWidth = "0";
+      meta.innerHTML = '<div class="app-name"></div><div class="app-sub"></div>';
+      meta.querySelector(".app-name").textContent = item.name;
+      meta.querySelector(".app-sub").textContent =
+        (CAT_LABEL[item.category] || item.category) + " · " + fmtSize(item.size) +
+        " · " + (item.updated_at || "").slice(0, 10);
+      if (installedIds.has(idOf(item.name))) {
+        const badge = document.createElement("span");
+        badge.className = "badge-installed"; badge.textContent = "已安装";
+        meta.querySelector(".app-sub").after(badge);
+      }
+      top.append(ico, meta); card.append(top);
+
+      const acts = document.createElement("div"); acts.className = "app-acts";
+      const mkBtn = (text, cls, fn) => {
+        const b = document.createElement("button");
+        b.className = cls || ""; b.textContent = text; b.onclick = () => fn(b);
+        return b;
+      };
+      if (item.category === "wallpaper") {
+        acts.append(mkBtn("安装", "", async (b) => {
+          await run(b, "安装中…", async () => await installItem(item, vfs, fetcher), "已安装");
+        }));
+        acts.append(mkBtn("设为壁纸", "primary", async (b) => {
+          b.disabled = true; b.textContent = "下载校验…";
+          try {
+            const r = await applyFromRepoItem(null, item);
+            b.textContent = r.kind === "theme" ? "动态壁纸✓" : "壁纸已应用✓";
+            say(item.name + " 已安装到 /system/wallpaper/ 并设为桌面壁纸");
+          } catch (e) { b.textContent = "失败"; say("应用失败: " + e.message); }
+          finally { await refreshInstalled(); setTimeout(() => { b.disabled = false; b.textContent = "设为壁纸"; }, 3000); }
+        }));
+      } else if (installedIds.has(idOf(item.name))) {
+        acts.append(mkBtn("打开", "primary", async () => say("应用运行器（RenderServer 集成）开发中，敬请期待")));
+        acts.append(mkBtn("卸载", "", async (b) => {
+          await run(b, "卸载中…", async () => await uninstallApp(idOf(item.name), vfs), "已卸载");
+          setTimeout(renderGrid, 800);
+        }));
+      } else {
+        acts.append(mkBtn("安装", "primary", async (b) => {
+          await run(b, "下载校验…", async () => await installItem(item, vfs, fetcher), "已安装");
+        }));
+      }
+      card.append(acts);
+      return card;
+    }
+
+    async function run(btn, busyText, fn, doneText) {
+      btn.disabled = true; btn.textContent = busyText;
+      try { await fn(); btn.textContent = doneText; }
+      catch (e) { btn.textContent = "失败"; say("操作失败: " + e.message); }
+      finally { await refreshInstalled(); setTimeout(renderGrid, 900); }
+    }
+    function say(msg) { $status.textContent = msg; }
+
+    function renderGrid() {
+      $grid.innerHTML = "";
+      if (tab === "installed") {
+        const apps = all.filter((i) => installedIds.has(idOf(i.name)));
+        if (!apps.length) { $grid.innerHTML = '<div class="store-empty">还没有安装任何内容。</div>'; return; }
+        apps.forEach((i) => $grid.append(makeCard(i)));
+        return;
+      }
+      const items = tab ? all.filter((i) => i.category === tab) : all;
+      if (!items.length) { $grid.innerHTML = '<div class="store-empty">软件源这个分类暂时是空的。</div>'; return; }
+      items.forEach((i) => $grid.append(makeCard(i)));
+    }
+
+    try {
+      const idx = await window.MosRepo.loadIndex(true);
+      all = idx.files || [];
+      await refreshInstalled();
+      say("已连接 mos-repo · " + all.length + " 个条目 · 索引 " +
+        (idx.generated_at || "").slice(0, 16).replace("T", " ") +
+        (lastWall ? " · 当前壁纸: " + lastWall.path : ""));
+      renderTabs(); renderGrid();
+    } catch (e) {
+      say("软件源连接失败: " + e.message);
+      $grid.innerHTML = "";
+    }
+  </script>
+</body>
+</html>

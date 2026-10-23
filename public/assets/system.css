@@ -200,3 +200,11 @@ a.touch-cloud-widget { color: inherit; text-decoration: none; }
 /* 桌面应用坞/菜单等浮层置顶（同层叠上下文） */
 .desktop-dock { position: relative; z-index: 30; }
 .context-menu { z-index: 100; }
+
+/* ===== 应用商店入口图标 ===== */
+.touch-app-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+  color: inherit; text-decoration: none; background: #ffffff14; border: 1px solid #ffffff2b; border-radius: 18px; }
+.touch-app-slot svg { width: 38%; height: 38%; }
+.touch-app-slot span { font-size: 12px; opacity: .85; }
+.dock-app { padding: 8px 18px; border: 1px solid #ffffff33; border-radius: 14px; background: #ffffff12;
+  color: inherit; text-decoration: none; font-size: 13px; }
