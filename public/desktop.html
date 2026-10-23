@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="/assets/system.css">
 </head>
 <body class="desktop-os">
+  <div id="desktop">
+    <div id="wallpaper-layer" aria-hidden="true"></div>
+    <div id="desktop-ui-layer">
   <main class="desktop-screen">
     <header class="system-bar">
       <div class="system-menu">
@@ -39,5 +42,13 @@
       <span class="dock-empty">应用会显示在这里</span>
     </footer>
   </main>
+    </div>
+  </div>
+  <script type="module">
+    import { mountWallpaper } from '/assets/theme_host.js';
+    const layer = document.getElementById('wallpaper-layer');
+    mountWallpaper(layer);
+    document.addEventListener('mos-wallpaper-changed', () => mountWallpaper(layer));
+  </script>
 </body>
 </html>

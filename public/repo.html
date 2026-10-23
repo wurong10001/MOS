@@ -43,6 +43,10 @@
   </main>
 
   <script src="/assets/repo.js"></script>
+  <script type="module">
+    import { applyFromRepoItem, mountWallpaper } from "/assets/theme_host.js";
+    window.MosThemeHost = { apply: applyFromRepoItem, mount: mountWallpaper };
+  </script>
   <script>
     (function () {
       const CAT_LABEL = { wallpaper: "壁纸", mosapp: "应用", misc: "其他" };

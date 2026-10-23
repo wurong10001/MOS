@@ -9,18 +9,21 @@
   <link rel="stylesheet" href="/assets/system.css">
 </head>
 <body class="touch-os">
+  <div id="desktop">
+    <div id="wallpaper-layer" aria-hidden="true"></div>
+    <div id="desktop-ui-layer">
   <main class="touch-screen">
     <section class="touch-widgets" aria-label="桌面小组件">
       <div class="touch-date-widget">
         <span class="touch-weekday">星期五</span>
         <strong>10月16日</strong>
       </div>
-      <div class="touch-cloud-widget">
+      <a class="touch-cloud-widget" href="/repo.html" aria-label="打开 MOS 软件源">
         <span class="cloud-widget-mark">m</span>
         <span class="cloud-widget-label">MOS CLOUD</span>
         <strong>你的云端空间</strong>
-        <small>桌面已准备就绪</small>
-      </div>
+        <small>点按进入软件源</small>
+      </a>
     </section>
 
     <section class="touch-icon-grid" aria-label="应用图标位置">
@@ -49,6 +52,8 @@
     </footer>
     <div class="touch-home-indicator" aria-hidden="true"></div>
   </main>
+    </div>
+  </div>
   <script>
     (() => {
       const screen = window.screen;
@@ -67,6 +72,12 @@
       window.addEventListener("resize", updateSafeArea);
       window.addEventListener("orientationchange", updateSafeArea);
     })();
+  </script>
+  <script type="module">
+    import { mountWallpaper } from '/assets/theme_host.js';
+    const layer = document.getElementById('wallpaper-layer');
+    mountWallpaper(layer);
+    document.addEventListener('mos-wallpaper-changed', () => mountWallpaper(layer));
   </script>
 </body>
 </html>

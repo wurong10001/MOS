@@ -187,3 +187,16 @@ h1,h2,h3,p { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* ===== 壁纸主题系统：三层结构与层级 ===== */
+#desktop { position: fixed; inset: 0; overflow: hidden; }
+#wallpaper-layer { position: absolute; inset: 0; z-index: 0; }
+#wallpaper-layer .wallpaper-image { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; }
+#wallpaper-layer iframe { display: block; width: 100%; height: 100%; border: none; }
+#wallpaper-layer iframe.wallpaper-inert { pointer-events: none; }
+#desktop-ui-layer { position: absolute; inset: 0; z-index: 10; }
+body.has-wallpaper .desktop-screen, body.has-wallpaper .touch-screen { background: transparent; }
+a.touch-cloud-widget { color: inherit; text-decoration: none; }
+/* 桌面应用坞/菜单等浮层置顶（同层叠上下文） */
+.desktop-dock { position: relative; z-index: 30; }
+.context-menu { z-index: 100; }
