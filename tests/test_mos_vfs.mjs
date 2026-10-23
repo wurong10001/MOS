@@ -1,6 +1,6 @@
 // MOS 壁纸/主题系统单元测试（Node 运行: node tests/test_mos_vfs.mjs）
 // 覆盖: mos-vfs 路径与读写 / mos-zip 解析 / mos-theme-core 主题协议
-import { readFileSync } from "node:fs";
+import { readFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
 
