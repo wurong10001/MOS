@@ -42,6 +42,7 @@ mk("${fx("theme_test.zip")}", {
 # 模仿真实 Hello-world.zip: 根下唯一 html, 无 manifest/index
 mk("${fx("single_html.zip")}", {'desktop-wallpaper.html': '.<script>var z=1;</script>'})
 mk("${fx("noimg.zip")}", {'readme.txt': b'x'})
+mk("${fx("mixed_html.zip")}", {'desktop-wallpaper.html': '<div>wallpaper</div>', 'index.html': '<div>index</div>', 'about.html': '<div>about</div>'})
 mk("${fx("wall_test.zip")}", {'sunset.png': PNG, 'nested/deep_blue.png': PNG, 'readme.txt': b'no', '../evil.png': PNG}, True)
 mk("${fx("wall_stored.zip")}", {'flat.png': PNG}, False)
 `]);
