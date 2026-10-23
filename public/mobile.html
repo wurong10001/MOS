@@ -18,43 +18,19 @@
         <span class="touch-weekday">星期五</span>
         <strong>10月16日</strong>
       </div>
-      <a class="touch-cloud-widget" href="/repo.html" aria-label="打开 MOS 软件源">
+      <a class="touch-cloud-widget" href="/store.html" aria-label="打开 MOS 应用商店">
         <span class="cloud-widget-mark">m</span>
         <span class="cloud-widget-label">MOS CLOUD</span>
         <strong>你的云端空间</strong>
-        <small>点按进入软件源</small>
+        <small>点按进入应用商店</small>
       </a>
     </section>
 
-    <section class="touch-icon-grid" aria-label="应用图标位置">
-      <a class="touch-icon-slot touch-app-slot" href="/store.html" aria-label="应用商店">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>
-        <span>应用商店</span>
-      </a>
-      <a class="touch-icon-slot touch-app-slot" href="/repo.html" aria-label="软件源">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 18l6-5 4 3 3-2 5 4"/></svg>
-        <span>软件源</span>
-      </a>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 3"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 4"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 5"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 6"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 7"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 8"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 9"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 10"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 11"></span>
-      <span class="touch-icon-slot" aria-label="应用图标预留位置 12"></span>
-    </section>
+    <section class="touch-icon-grid" id="app-grid" aria-label="应用图标"></section>
 
     <footer class="touch-bottom">
-      <div class="touch-page-dots" aria-label="第 1 页，共 2 页"><i class="selected"></i><i></i></div>
-      <nav class="touch-dock" aria-label="Dock 图标位置">
-        <span class="touch-icon-slot" aria-label="Dock 图标预留位置 1"></span>
-        <span class="touch-icon-slot" aria-label="Dock 图标预留位置 2"></span>
-        <span class="touch-icon-slot" aria-label="Dock 图标预留位置 3"></span>
-        <span class="touch-icon-slot" aria-label="Dock 图标预留位置 4"></span>
-      </nav>
+      <div class="touch-page-dots" aria-label="第 1 页，共 1 页"><i class="selected"></i></div>
+      <nav class="touch-dock" aria-label="程序坞"></nav>
     </footer>
     <div class="touch-home-indicator" aria-hidden="true"></div>
   </main>
@@ -84,6 +60,32 @@
     const layer = document.getElementById('wallpaper-layer');
     mountWallpaper(layer);
     document.addEventListener('mos-wallpaper-changed', () => mountWallpaper(layer));
+
+    // 桌面应用注册表：icon 为 null（未配置图标）时渲染空图标，图标下方显示程序名。
+    // 后续接入图标包时，仅需把 app.icon 换成图标包解析出的 URL。
+    const MOS_APPS = [
+      { id: 'appstore', name: '应用商店', url: '/store.html', icon: null },
+    ];
+    const grid = document.getElementById('app-grid');
+    for (const app of MOS_APPS) {
+      const a = document.createElement('a');
+      a.className = 'touch-icon-slot touch-app-slot';
+      a.href = app.url;
+      a.setAttribute('aria-label', app.name);
+      const box = document.createElement('span');
+      box.className = 'app-tile-icon';
+      if (app.icon) {
+        const img = document.createElement('img');
+        img.src = app.icon;
+        img.alt = '';
+        box.appendChild(img);
+      }
+      const label = document.createElement('span');
+      label.className = 'app-tile-name';
+      label.textContent = app.name;
+      a.append(box, label);
+      grid.appendChild(a);
+    }
   </script>
 </body>
 </html>
