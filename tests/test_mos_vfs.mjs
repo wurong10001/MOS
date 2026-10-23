@@ -110,6 +110,11 @@ await t("resolveTheme: manifest.entry 优先", async () => {
   eq(r.manifest.name, "测试星空", "manifest.name");
   eq(r.manifest.allowPointerEvents, false, "manifest.allowPointerEvents");
 });
+await t("resolveTheme: desktop-wallpaper.html 为正式候选、优先于 index.html", async () => {
+  const zip = await openZip(abOf(fx("mixed_html.zip")));
+  const r = await resolveTheme(zip);
+  eq(r.entryName, "desktop-wallpaper.html", "命名候选优先");
+});
 await t("resolveTheme: 无 index 时取根下单个 html", async () => {
   const zip = await openZip(abOf(fx("single_html.zip")));
   const r = await resolveTheme(zip);

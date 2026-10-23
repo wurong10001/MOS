@@ -1,9 +1,9 @@
 /* mos-theme-core.js — 壁纸/主题协议核心（零依赖，浏览器 + Node 通用）
  *
  * 规则（对应用户的壁纸主题设计）:
- *  - zip 且能解析出 HTML 入口(manifest.entry 优先, 其次 index.html / wallpaper|theme/index.html,
- *    再次根下唯一 *.html) => "动态主题": 全量文件入库 /system/wallpaper/<主题名>/,
- *    css/js 外链内联成可渲染文档, 宿主放入 sandbox iframe
+ *  - zip 且能解析出 HTML 入口(manifest.entry 优先; 命名候选 desktop-wallpaper.html
+ *    > index.html > wallpaper/ 与 theme/ 下同名; 再兜底根下唯一 *.html) => "动态主题":
+ *    全量文件入库 /system/wallpaper/<壁纸名>/, css/js 外链内联成可渲染文档, 宿主放入 sandbox iframe
  *  - zip 但无 HTML 入口 => "图片包": 仅图片扩展名条目入库(防目录穿越)
  *  - 非 zip 但图片扩展名 => 单图入库 /system/wallpaper/<文件名>
  *  - 其余 => 抛错, 不落盘
@@ -61,7 +61,8 @@ export async function resolveTheme(zip) {
   }
   const cands = [];
   if (manifest && manifest.entry) cands.push(String(manifest.entry).replace(/^\.?\//, ""));
-  cands.push("index.html", "wallpaper/index.html", "theme/index.html");
+  cands.push("desktop-wallpaper.html", "index.html",
+    "wallpaper/desktop-wallpaper.html", "wallpaper/index.html", "theme/index.html");
   for (const c of cands) if (names.includes(c)) return { entryName: c, manifest };
   const roots = names.filter((n) => !n.includes("/") && /\.html$/i.test(n)).sort();
   if (roots.length) return { entryName: roots[0], manifest };
